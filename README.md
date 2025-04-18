@@ -2,6 +2,8 @@
 
 A Prometheus exporter for [Starling Bank's Developer API](https://developer.starlingbank.com/docs).
 
+Forked from [rornic/starling_exporter](github.com/rornic/starling_exporter). Primarily to add Nix flake and other tweaks.
+
 ## Why is this a thing?
 
 I found out Starling Bank have a developer API, and decided to hook it up to my Pi Zero hosted monitoring stack. Why not?
@@ -22,10 +24,11 @@ docker run -p8080:8080 -eSTARLING_ACCESS_TOKEN="my-pat" rornic/starling-exporter
 
 ### Environment Variables
 
-| Name                    | Description                                                   |
-| ----------------------- | ------------------------------------------------------------- |
-| `STARLING_ACCESS_TOKEN` | Your Starling Personal Access Token                           |
-| `STARLING_SANDBOX`      | Use the sandbox environment. Example: `STARLING_SANDBOX=true` |
+| Name                          | Description                                                   |
+| ------------------------------| ------------------------------------------------------------- |
+| `STARLING_ACCESS_TOKEN`       | Your Starling Personal Access Token                           |
+| `STARLING_ACCESS_TOKEN_PATH`  | Path to file containing your Starling Personal Access Token   |
+| `STARLING_SANDBOX`            | Use the sandbox environment. Example: `STARLING_SANDBOX=true` |
 
 ### Access Token
 
