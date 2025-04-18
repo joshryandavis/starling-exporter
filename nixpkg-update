@@ -1,0 +1,17 @@
+#! /usr/bin/env nix-shell
+#! nix-shell --impure -i bash -p bash go jq
+
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+go mod tidy
+go mod vendor
+BIN=bin/starlingexporter
+go build -o $BIN .
+VENDOR_HASH=$(nix hash path vendor)
+BIN_HASH=$(nix hash file $BIN)
+JSON="{\"vendor-hash\": \"$VENDOR_HASH\", \"bin-hash\": \"$BIN_HASH\"}"
+jq -n "$JSON" > nixpkg.json
+rm -rf vendor/
+nix flake update

@@ -42,7 +42,7 @@ func main() {
 	slog.Info("listening on :8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		slog.Error("error running server: %v\n", err)
+		slog.Error("error running server", "error", err)
 		os.Exit(1)
 	}
 }
