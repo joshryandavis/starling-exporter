@@ -12,12 +12,7 @@ import (
 )
 
 func initialiseStarlingClient() client.StarlingClient {
-	accessToken := os.Getenv("STARLING_ACCESS_TOKEN")
-	if accessToken == "" {
-		slog.Error("STARLING_ACCESS_TOKEN is not set. Exiting.")
-		os.Exit(1)
-	}
-	slog.Info("found access token in environment")
+	accessToken := getTokenFromEnvironment()
 
 	endpoint := "https://api.starlingbank.com/api/v2"
 	sandbox := strings.ToLower(os.Getenv("STARLING_SANDBOX")) == "true"
@@ -29,6 +24,32 @@ func initialiseStarlingClient() client.StarlingClient {
 	client := client.NewStarlingHttpClient(accessToken, endpoint)
 	return &client
 
+}
+
+func getTokenFromEnvironment() string {
+	var accessToken string
+
+	accessTokenPath := os.Getenv("STARLING_ACCESS_TOKEN_PATH")
+	if accessTokenPath != "" {
+		slog.Info("found access token path in environment")
+		accessTokenBytes, err := os.ReadFile(accessTokenPath)
+		if err != nil {
+			slog.Error("error reading access token file", "error", err)
+			os.Exit(1)
+		}
+		accessToken = string(accessTokenBytes)
+	}
+	if accessToken == "" {
+		accessToken = os.Getenv("STARLING_ACCESS_TOKEN")
+	}
+	if accessToken == "" {
+		slog.Error("no access token available from STARLING_ACCESS_TOKEN_PATH or STARLING_ACCESS_TOKEN. Exiting.")
+		os.Exit(1)
+	}
+	accessToken = strings.TrimSpace(accessToken)
+	slog.Info("found access token")
+
+	return accessToken
 }
 
 func main() {

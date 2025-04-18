@@ -37,6 +37,11 @@
               };
               token = lib.mkOption {
                 type = lib.types.str;
+                default = "";
+              };
+              tokenPath = lib.mkOption {
+                type = lib.types.str;
+                default = "";
               };
             };
           };
@@ -46,6 +51,7 @@
               wantedBy = ["multi-user.target"];
               after = ["network.target"];
               environment = {
+                STARLING_ACCESS_TOKEN_PATH = config.services.starlingexporter.tokenPath;
                 STARLING_ACCESS_TOKEN = config.services.starlingexporter.token;
               };
               serviceConfig = {
